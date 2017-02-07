@@ -116,10 +116,10 @@ The query language, Femtocode, plays a similar \mbox{role as TTreeFormula:\hspac
 \end{itemize}
 
 \vspace{0.3 cm}
-However, it's a full-fledged language with assignments and user-defined functions, so that it can encompass a larger part of the analysis.
+However, it's a full-fledged language with assignments and user-defined functions, so that it can encompass a larger part of the data analysis.
 
 \vspace{0.3 cm}
-\textcolor{darkgray}{(I've examined SQL, LINQ, and others, and they are not sufficient. I would use a standard if I could.)}
+\textcolor{darkgray}{(I've examined SQL, LINQ, and others, and they are not sufficient. I would use a standard if I could. Femtocode BNF has $>$ 50\% overlap with Python BNF.)}
 \end{frame}
 
 \begin{frame}{Why I'm interested in columnar data}
@@ -273,7 +273,7 @@ Calculating arbitrary explosions is solved in two cases:
 \begin{minipage}{0.8\linewidth}
 \scriptsize
 \vspace{0.3 cm}
-\textcolor{darkblue}{Illustration of the first:}
+\textcolor{darkblue}{Illustration of scalar-to-list:}
 
 \vspace{0.2 cm}
 xs $\to$ [1, 2, 3, 4], [], [5, 6, 7] and y $\to$ 100, 200, 300
@@ -298,7 +298,7 @@ yields
 \begin{minipage}{0.8\linewidth}
 \scriptsize
 \vspace{0.3 cm}
-\textcolor{darkblue}{Illustration of the second:}
+\textcolor{darkblue}{Illustration of list-to-deeper-list:}
 
 \vspace{0.2 cm}
 xss $\to$ [[100, 200], [300, 400], [500, 600]] and ys $\to$ [1, 2, 3, 4]
@@ -325,7 +325,7 @@ yields
 \begin{minipage}{0.8\linewidth}
 \scriptsize
 \vspace{0.3 cm}
-\textcolor{darkblue}{Another illustration of the second:}
+\textcolor{darkblue}{Another illustration of list-to-deeper-list:}
 
 \vspace{0.2 cm}
 xss $\to$ [[100, 200], [300, 400], [500, 600]] and ys $\to$ [1, 2, 3, 4]
@@ -365,7 +365,7 @@ Before finishing the language, we want to understand how it will fit into the se
 \end{frame}
 
 \begin{frame}{Query server}
-If this is going to replace private skims, it has to respond to aggregations over whole datasets in seconds.
+If a centralized query server is going to replace private skims, it has to respond to aggregations over whole datasets in seconds.
 
 \vfill
 \textcolor{darkblue}{Purpose of early studies:} determine what performance is {\it possible.}
@@ -390,14 +390,14 @@ AK8 jet   & 1.8     &  95         & 2.10   &   556       &   1000       \\
 \small
 \begin{itemize}
 \item CMSSW loads all branches to reconstruct particles as a C++ objects. Loading all branches just to cut on $p_T$ is wasteful.
-\item {\tt TTree::Draw()} is more streamlined, only loads required branches. \textcolor{darkgray}{(Low muon rate not understood.)}
+\item {\tt TTree::Draw()} is more streamlined, only loads required branches. \textcolor{darkgray}{(Low rate for muons is not understood.)}
 \item ``fast reader'' is based on a code snippet Philippe prepared for me, using some of the same techniques as {\tt TTree::Draw()}.
 \end{itemize}
 \end{frame}
 
 \begin{frame}{Repeated queries on that file}
 \vspace{0.5 cm}
-We plan to maintain an in-memory cache of recently used {\it columns,} on the supposition that the column-popularity distribution is steep enough to cause frequent cache-hits.
+We also plan to maintain an in-memory cache of recently used {\it columns,} on the supposition that the column-popularity distribution is steep enough to cause frequent cache-hits among users.
 
 \vspace{0.4 cm}
 \textcolor{darkblue}{Rate for simple, \\ flat functions on \\ cached columns is \\ limited only by \\ memory bandwidth.}
