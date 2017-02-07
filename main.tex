@@ -189,9 +189,46 @@ Known in the Numpy community as a ``ufunc.''
 \end{frame}
 
 \begin{frame}[fragile]{Flat transformations}
-\vspace{0.3 cm}
-Any C function can be wrapped up as a ufunc.
+\vspace{0.5 cm}
+The majority of steps in a typical calculation are flat:
 
+\begin{center}
+\begin{minipage}{0.7\linewidth}
+\small
+\begin{minted}{c++}
+double in[ZILLION];
+double out[ZILLION];
+
+for (int i = 0;  i < ZILLION;  i++)
+  out[i] = flat_operation(in[i]);
+\end{minted}
+\end{minipage}
+\end{center}
+
+%% or equivalently
+
+%% \small
+%% \begin{minted}{c++}
+%% __global__ void gpu_kernel(double *in, double *out) {
+%%   int i = threadIdx.x + blockId.x * blockDim.x;
+%%   out[i] = flat_operation(in[i]);
+%% }
+%% \end{minted}
+%% \normalsize
+
+\begin{itemize}
+\item Compilation with {\tt -O3} does auto-vectorization if possible (depends on {\tt flat\_operation}).
+\item Easiest form for CPU to prefetch memory and/or pipeline operations.
+\item This form is also ideal for GPU calculations.
+\item There is a standard for functions like this: Numpy's ufunc is widely used among scientific libraries.
+\begin{itemize}
+\item Easy way for a user to add functions to the language!
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{ROOT functions can be ufuncs, too}
+\vspace{0.3 cm}
 \scriptsize
 \begin{minted}{python}
 import ctypes, numpy, numba
@@ -215,7 +252,7 @@ result = [ROOT.TMath.ChisquareQuantile(pi, 100) for pi in p]
 # 9.32 seconds
 \end{minted}
 
-\vspace{0.1 cm}
+\vspace{0.5 cm}
 \textcolor{darkgray}{(Performance comparison is just to show that the ufunc \mbox{computes {\tt ChisquareQuantile}\hspace{-1 cm}}}
 
 \vspace{-0.1 cm}
