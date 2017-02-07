@@ -82,88 +82,85 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% \begin{frame}{Why I'm interested in columnar data}
-%% \vspace{0.5 cm}
-%% I'm working on a query language and database server to aggregate large samples of HEP data on the fly.
+\begin{frame}{Why I'm interested in columnar data}
+\vspace{0.5 cm}
+I'm working on a query language and database server to aggregate large samples of HEP data on the fly.
 
-%% \vspace{0.3 cm}
-%% \textcolor{darkblue}{Purpose:} to eliminate the need for private skims in most situations.
+\vspace{0.3 cm}
+\textcolor{darkblue}{Purpose:} to eliminate the need for private skims in most situations.
 
-%% \vfill
-%% \begin{center}
-%% \large \textcolor{darkblue}{to replace}
+\vspace{0.3 cm}
+\begin{center}
+\large \textcolor{darkblue}{to replace}
 
-%% \vspace{0.3 cm}
-%% \includegraphics[width=0.9\linewidth]{workflow.png}
-%% \end{center}
+\includegraphics[width=0.9\linewidth]{workflow.png}
+\end{center}
 
-%% \vfill
-%% \begin{center}
-%% \large \textcolor{darkblue}{with}
+\begin{center}
+\large \textcolor{darkblue}{with}
 
-%% \vspace{0.3 cm}
-%% \includegraphics[width=0.9\linewidth]{workflow2.png}
-%% \end{center}
-%% \end{frame}
+\includegraphics[width=0.9\linewidth]{workflow2.png}
+\end{center}
+\end{frame}
 
-%% \begin{frame}{Why I'm interested in columnar data}
-%% The query language, Femtocode, plays a similar \mbox{role as TTreeFormula:\hspace{-1 cm}}
-%% \begin{itemize}
-%% \item a high-level language for the physicist
-%% \item usually for filling a histogram (so query responses are small)
-%% \item but generally useful for transforming one dataset into another.
-%% \end{itemize}
+\begin{frame}{Why I'm interested in columnar data}
+The query language, Femtocode, plays a similar \mbox{role as TTreeFormula:\hspace{-1 cm}}
+\begin{itemize}
+\item a high-level language for the physicist
+\item usually for filling a histogram (so query responses are small)
+\item but generally useful for transforming one dataset into another.
+\end{itemize}
 
-%% \vspace{0.3 cm}
-%% However, it's a full-fledged language with assignments and user-defined functions, so that it can encompass a larger part of the analysis.
+\vspace{0.3 cm}
+However, it's a full-fledged language with assignments and user-defined functions, so that it can encompass a larger part of the analysis.
 
-%% \vspace{0.3 cm}
-%% \textcolor{darkgray}{(I've examined SQL, LINQ, and others, and they are not sufficient. I would use a standard if I could.)}
-%% \end{frame}
+\vspace{0.3 cm}
+\textcolor{darkgray}{(I've examined SQL, LINQ, and others, and they are not sufficient. I would use a standard if I could.)}
+\end{frame}
 
-%% \begin{frame}{Why I'm interested in columnar data}
-%% The essential feature of Femtocode is that it can transform complex structure-manipulations, which would ordinarily have to be performed in object-oriented code, into a series of vectorized kernels.
+\begin{frame}{Why I'm interested in columnar data}
+The essential feature of Femtocode is that it can transform complex structure-manipulations, which would ordinarily have to be performed in object-oriented code, into a series of vectorized kernels.
 
-%% \vspace{0.3 cm}
-%% It operates on columns.
-%% \end{frame}
+\vspace{0.3 cm}
+It operates on columns.
+\end{frame}
 
-%% \begin{frame}[fragile]{Data reduction without objects}
-%% \vspace{0.3 cm}
-%% \hspace{-0.25 cm}\textcolor{darkblue}{Example:}
-%% \small
-%% \begin{minted}{python}
-%%   hist = dataset..bin(100, 0, 50, """
-%%       muons.map(m => sqrt(m.px**2 + m.py**2)).max()
-%%   """)
-%% \end{minted}
-%% \normalsize
+\begin{frame}[fragile]{Data reduction without objects}
+\vspace{0.3 cm}
+\hspace{-0.25 cm}\textcolor{darkblue}{Example:}
+\small
+\begin{minted}{python}
+  hist = dataset..bin(100, 0, 50, """
+      muons.map(m => sqrt(m.px**2 + m.py**2)).max()
+  """)
+\end{minted}
+\normalsize
 
-%% \vfill
-%% \mbox{\hspace{0.25 cm}\begin{columns}[t]
-%% \column{0.5\linewidth}
-%% \textcolor{darkblue}{transforms to}
-%% \begin{enumerate}
-%% \item Pass over all muons, computing $\sqrt{{p_x}^2 + {p_y}^2}$ on all muons, ignoring event boundaries.
-%% \item Find the maximum such value for each event.
-%% \item Bin those events and fill the histogram.
-%% \end{enumerate}
+\vfill
+\mbox{\hspace{0.25 cm}\begin{columns}[t]
+\column{0.5\linewidth}
+\textcolor{darkblue}{transforms to}
+\begin{enumerate}
+\item Pass over all muons, computing $\sqrt{{p_x}^2 + {p_y}^2}$ on all muons, ignoring event boundaries.
+\item Find the maximum such value for each event.
+\item Bin those events and fill the histogram.
+\end{enumerate}
 
-%% \column{0.5\linewidth}
-%% \normalsize
-%% \textcolor{darkblue}{rather than}
-%% \begin{enumerate}
-%% \item Loop over events:
-%% \begin{enumerate}
-%% \item Loop over muons:
-%% \begin{enumerate}
-%% \item Compute $\sqrt{{p_x}^2 + {p_y}^2}$ for each.
-%% \end{enumerate}
-%% \item Fill a histogram with the maximum.
-%% \end{enumerate}
-%% \end{enumerate}
-%% \end{columns}}
-%% \end{frame}
+\column{0.5\linewidth}
+\normalsize
+\textcolor{darkblue}{rather than}
+\begin{enumerate}
+\item Loop over events:
+\begin{enumerate}
+\item Loop over muons:
+\begin{enumerate}
+\item Compute $\sqrt{{p_x}^2 + {p_y}^2}$ for each.
+\end{enumerate}
+\item Fill a histogram with the maximum.
+\end{enumerate}
+\end{enumerate}
+\end{columns}}
+\end{frame}
 
 \begin{frame}{Scope of computability}
 \vspace{0.5 cm}
@@ -204,17 +201,6 @@ for (int i = 0;  i < ZILLION;  i++)
 \end{minted}
 \end{minipage}
 \end{center}
-
-%% or equivalently
-
-%% \small
-%% \begin{minted}{c++}
-%% __global__ void gpu_kernel(double *in, double *out) {
-%%   int i = threadIdx.x + blockId.x * blockDim.x;
-%%   out[i] = flat_operation(in[i]);
-%% }
-%% \end{minted}
-%% \normalsize
 
 \begin{itemize}
 \item Compilation with {\tt -O3} does auto-vectorization if possible (depends on {\tt flat\_operation}).
