@@ -189,30 +189,37 @@ Known in the Numpy community as a ``ufunc.''
 \end{frame}
 
 \begin{frame}[fragile]{Flat transformations}
+\vspace{0.3 cm}
+Any C function can be wrapped up as a ufunc.
+
 \scriptsize
 \begin{minted}{python}
-import ctypes
-import numpy
-import numba
+import ctypes, numpy, numba
 
 libMathCore = ctypes.cdll.LoadLibrary("libMathCore.so")
+chi2_ctypes = libMathCore._ZN5TMath17ChisquareQuantileEdd # c++filt!
+chi2_ctypes.argtypes = (ctypes.c_double, ctypes.c_double)
+chi2_ctypes.restype = ctypes.c_double
 
-ChisquareQuantile_ctypes = libMathCore._ZN5TMath17ChisquareQuantileEdd
-ChisquareQuantile_ctypes.argtypes = (ctypes.c_double, ctypes.c_double)
-ChisquareQuantile_ctypes.restype = ctypes.c_double
-
+# compile to pure-C ufunc
 @numba.vectorize(["f8(f8, f8)"], nopython=True)
-def ChisquareQuantile_Numpy(p, ndf):
-    return ChisquareQuantile_ctypes(p, ndf)
+def chi2_ufunc(p, ndf):
+    return chi2_ctypes(p, ndf)
 
-p = numpy.random.uniform(0, 1, int(1e6))
-
-result = [ChisquareQuantile_ctypes(pi, 100) for pi in p]
-# 10.30 seconds
-
-result = ChisquareQuantile_Numpy(p, 100)
+p = numpy.random.uniform(0, 1, int(1e6)) # million random numbers
+result = chi2_ufunc(p, 100)              # call ufunc on all of them
 # 3.22 seconds
+
+import ROOT
+result = [ROOT.TMath.ChisquareQuantile(pi, 100) for pi in p]
+# 9.32 seconds
 \end{minted}
+
+\vspace{0.1 cm}
+\textcolor{darkgray}{(Performance comparison is just to show that the ufunc \mbox{computes {\tt ChisquareQuantile}\hspace{-1 cm}}}
+
+\vspace{-0.1 cm}
+\textcolor{darkgray}{in C, not in Python. Simpler functions show a more dramatic difference.)}
 \end{frame}
 
 
